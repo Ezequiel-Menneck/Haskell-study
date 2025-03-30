@@ -347,3 +347,20 @@ guardSize' num
 
 No caso de guards o let e where funcionam da maneira convencional, `where` está disponível em toda a expressão, em todo o contexto e `let` apenas dentro de sua branch.
 
+# Looping
+
+```haskell
+fizzBuzzFor number 
+  | 0 == number `rem` 15 = "fizzbuzz"
+  | 0 == number `rem` 5 = "buzz"
+  | 0 == rem number 3 = "fizz"
+  | otherwise = show number
+
+nativeFizzBuzz fizzBuzzCount curNum fizzBuzzString =
+  if curNum > fizzBuzzCount
+    then fizzBuzzString
+  else 
+    let nextFizzBuzzString = fizzBuzzString <> fizzBuzzFor curNum <> " "
+        nextNumber = curNum + 1
+    in nativeFizzBuzz fizzBuzzCount nextNumber nextFizzBuzzString
+```
