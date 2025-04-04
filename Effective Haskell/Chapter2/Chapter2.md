@@ -258,3 +258,68 @@ map'' f xs =
 ```
 
 ## Filtering List elements
+
+*Filter function* igual nas linguagens comuns do mercado.
+Permite selecionarmos itens X de uma lista, passamos uma função que retorna True para N caso e ela mantem esse item para nós. Exemplo de uma função que soma os números impares de 0 a 10
+```haskell
+sumOdd =
+	(foldr (+) 0 . filter odd) [0..10]
+```
+Em Haskell é comum combinarmos as funções de **filter, fold e map** em um processo de dados em pipeline. Combinando esses blocos podemos criar funções complexas de maneira fácil. Exemplo uma função *foodBudget* que nos ajuda a encontrar os gastos de uma festa.
+```haskell
+checkGuestList guestList name =
+  name `elem` guestList
+
+foodCosts =
+  [("Ren", 10.00)
+  ,("George", 4.00)
+  ,("Porter", 27.50)]
+
+partyBudget :: Num c => (b -> Bool) -> [(b, c)] -> c
+partyBudget isAttending =
+  foldr (+) 0 . map snd . filter (isAttending . fst)
+
+partyBudget' :: Num c => (b -> Bool) -> [(b, c)] -> c
+partyBudget' isAttending =
+  foldr ((+) . snd) 0 . filter (isAttending . fst)
+```
+Explicando a função em passo a passo:
+```haskell
+partyBudget' =
+foldr (+) 0
+. map snd
+. filter (\name -> fst name `elem` ["Ren","Porter"])
+$ [("Ren", 10.00) ,("George", 4.00) ,("Porter", 27.50)]
+```
+Quando compomos funções desse tipo casualmente queremos de da direita para esquerda. Nesse caso vamos começar lendo nosso *filter*.
+```haskell
+fst ("Ren", 10.00) `elem` ["Ren","Porter"]
+True
+fst ("George", 4.00) `elem` ["Ren","Porter"]
+False
+fst ("Porter", 27.50) `elem` ["Ren","Porter"]
+True
+```
+Após filtrarmos temos o seguinte resultado GHCI:
+```haskell
+λ :{
+> filteredNames =
+> filter (\name -> (fst name) `elem` ["Ren","Porter"]) $
+> [ ("Ren",10.00)
+> , ("George",4.00)
+> , ("Porter",27.50)]
+> :}
+λ filteredNames
+[("Ren",10.0),("Porter",27.5)]
+```
+Depois passamos nossa lista de *filteredNames* a função de transformação *map snd*.
+```haskell
+map snd [("Ren",10.00),("Porter",27.5)]
+= [snd ("Ren",10.00), snd ("Porter",27.5)]
+= [10.00,27.5]
+```
+E para finalizar só precisamos chamar ela com o *foldr* e aplicar a soma:
+```haskell
+foldr (+) 0 [10.0, 27.5]
+37.5
+```

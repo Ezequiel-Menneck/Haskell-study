@@ -33,7 +33,7 @@ headAndTail4 = tail (tail [1,2,3])
 headAndTail5 = tail [1]
 -- []
 
-listIsEmpty list = 
+listIsEmpty list =
   if list == []
     then print "This list is empty"
   else print $ "the first element of this list is: " <> show (head list)
@@ -67,7 +67,7 @@ factors num =
 
 
 isBalanced :: [String] -> Bool
-isBalanced s = 
+isBalanced s =
   0 == isBalanced' 0 s
   where
     isBalanced' count s
@@ -91,7 +91,7 @@ isBalanced' str =
       | letter == ')' = count - 1
       | otherwise = count
 
-concatString = 
+concatString =
   reduce concat ""
     where
       concat acc letter = acc <> letter
@@ -105,13 +105,13 @@ foldr func carryValue lst =
   if null lst
     then carryValue
   else func (head lst) $ foldr func carryValue (tail lst)
-  
+
 doubleElems :: [Int] -> [Int]
 doubleElems nums =
   if null nums
     then []
   else
-    let 
+    let
       hd = head nums
       tl = tail nums
     in (2 * hd) : doubleElems tl
@@ -126,13 +126,30 @@ doubleElems'' elems = foldr (applyElem (2*)) [] elems
     applyElem f elem accumulator = f elem : accumulator
 
 map' f = foldr (applyElem f) []
-  where 
+  where
     applyElem f elem accumulator = f elem : accumulator
 
 map'' :: (a1 -> a2) -> [a1] -> [a2]
-map'' f xs = 
+map'' f xs =
   if null xs then []
   else f (head xs) : map'' f (tail xs)
+
+checkGuestList guestList name =
+  name `elem` guestList
+
+foodCosts =
+  [("Ren", 10.00)
+  ,("George", 4.00)
+  ,("Porter", 27.50)]
+
+partyBudget :: Num c => (b -> Bool) -> [(b, c)] -> c
+partyBudget isAttending =
+  foldr (+) 0 . map snd . filter (isAttending . fst)
+
+partyBudget' :: Num c => (b -> Bool) -> [(b, c)] -> c
+partyBudget' isAttending =
+  foldr ((+) . snd) 0 . filter (isAttending . fst)
+
 
 main = do
   print $ countUp 300
@@ -140,3 +157,4 @@ main = do
   print $ factors 30
   print $ concatString ["a", "b", "c"]
   print $ doubleElems [1,2,3,4,5]
+  print $ partyBudget (checkGuestList ["Ren", "Porter"]) foodCosts
