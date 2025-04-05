@@ -150,6 +150,8 @@ partyBudget' :: Num c => (b -> Bool) -> [(b, c)] -> c
 partyBudget' isAttending =
   foldr ((+) . snd) 0 . filter (isAttending . fst)
 
+double = [ 2 * x | x <- [0..10]]
+doubleOdds = [ 2 * x | x <- [0..10], odd x]
 
 main = do
   print $ countUp 300

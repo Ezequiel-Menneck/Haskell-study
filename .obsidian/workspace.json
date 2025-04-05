@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "b5a5739fc42acddc",
@@ -179,7 +180,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "fe8efabf3c27d1c8",
+  "active": "a4b566b2353ee41e",
   "lastOpenFiles": [
     "Effective Haskell/Chapter2/Captura de Tela 2025-04-03 às 20.24.48.png",
     "Effective.md",

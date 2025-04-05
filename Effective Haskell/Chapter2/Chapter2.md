@@ -323,3 +323,5 @@ E para finalizar só precisamos chamar ela com o *foldr* e aplicar a soma:
 foldr (+) 0 [10.0, 27.5]
 37.5
 ```
+
+## Building Lists with Comprehesions
