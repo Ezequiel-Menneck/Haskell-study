@@ -153,6 +153,40 @@ partyBudget' isAttending =
 double = [ 2 * x | x <- [0..10]]
 doubleOdds = [ 2 * x | x <- [0..10], odd x]
 
+partyBudget'' isAttending willEat foodCost guests = 
+  sum $
+  [foodCost food
+  | guest <- map fst guests
+  , food <- map snd guests
+  , willEat guest food
+  , isAttending guest
+  ]
+
+combineLists as bs =
+  let 
+    a = head as
+    b = head bs
+    as' = tail as
+    bs' = tail bs
+  in
+    if null as || null bs
+      then []
+    else (a,b) : combineLists as' bs'
+
+
+mergedLists = combineLists [1..10] [11..20]
+mergedLists' = combineLists ["h", "l", "o"] ["e", "l", "o"]
+zipLists = zip ["h", "l", "o"] ["e", "l", "o"]
+zipLists' = combineLists [1..10] [11..20]
+
+pairwiseSum xs ys =
+  let sumEles pairs =
+        let a = fst pairs
+            b = snd pairs
+        in a + b
+  in map sumEles $ zip xs ys
+
+pairwiseSum' xs ys = map (uncurry (+)) $ zip xs ys
 main = do
   print $ countUp 300
   print $ countUp2 30
@@ -160,3 +194,8 @@ main = do
   print $ concatString ["a", "b", "c"]
   print $ doubleElems [1,2,3,4,5]
   print $ partyBudget (checkGuestList ["Ren", "Porter"]) foodCosts
+  print mergedLists
+  print mergedLists'
+  print zipLists
+  print zipLists'
+  print $ pairwiseSum' [1..10] [11..20]

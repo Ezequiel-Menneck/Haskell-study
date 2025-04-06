@@ -324,4 +324,91 @@ foldr (+) 0 [10.0, 27.5]
 37.5
 ```
 
-## Building Lists with Comprehesions
+## Building Lists with Comprehensions
+
+Podemos fazer combinações de *filter e map* usando *List Comprehensions*. É uma sintaxe alternativa para criar listas com maps e filters.
+A sintaxe é essa:
+```haskell
+double = [2 * number | number <- [0..10]]
+```
+Double - Nome da lista
+2 \* number - Expressão que vamos aplicar
+| divisor de expressão e de quem é number
+number <- \[0..10] - Quais os valores iniciais de number (lista)
+
+Se quisermos dobrar apenas numeros impares podemos fazer assim:
+```haskell
+doubleOdds = [number * 2 | numer <- [0..10], odd number]
+```
+
+A diferença nesse exemplo é que adicionamos um filtro que fica depois da declaração de quem é a lista que vamos operar.
+Mesma função escrita sem *List Comprehensions*
+```haskell
+double = map (\number -> number * 2) . filter odd $ [0..10]
+```
+
+List Comprehensions começa a ter valor quando temos funções mais complexas em cima de uma lista, mais de um filtro diferente. Exemplo onde queremos pegar duas listas de números e retornar os pares de elementos que aparecem na primeira e na segunda lista, apenas com os numeros impares da segunda lista:
+```haskell
+pairs as bs =
+  let as' = filter (`elem`bs) as
+      bs' = filter odd bs
+      makePairs a = map (\b -> (a,b)) bs'
+  in concat $ map mkPairs as'
+
+pairs [1..10] [2..5]
+-- [(2,3),(2,5),(3,3),(3,5),(4,3),(4,5),(5,3),(5,5)]
+```
+
+Agora vamos escrever isso com *List Comprehensions*
+```haskell
+pairs as bs =
+  [(a,b) | a <- as, b <- bs, a `elem` bs, odd b]
+```
+Muito mais simples e enxuto de escrever, fica nitido oque queremos.
+
+Outro exemplo agora com nossa função de *partyBudget* adicionando novas opções:
+```haskell
+partyBudget isAttending willEat foodCost guests = 
+  foldl (+) 0 $
+  [foodCost food
+  | guest <- map fst guests
+  , food <- map snd guests
+  , willEat guest food
+  , isAttending guest
+  ]
+```
+*List Comprehensions* é para quando queremos fazer modificações nas listas inteiras, se quisermos combinar apenas o primeiro elemento de uma lista com outra sera uma abordagem diferente:
+```haskell
+[(num, str) | num <- [1,2,3], str <- ["I","II","III"]]
+-- [(1,"I"),(1,"II"),(1,"III"),(2,"I"),(2,"II"),(2,"III"),(3,"I"),(3,"II"),(3,"III")]
+```
+
+Nesse caso não conseguimos associar cada um com seu romano respectivo, ja que a *List Comprehensions* aplica em tudo. Podemos fazer isso com criando uma função manual.
+```haskell
+combinesLists as bs =
+  let
+    a = head as
+    b = head as
+    as' = tail as
+    bs' = tail bs
+  in
+    if null as || num bs
+      then []
+    else (a, b) : combinesLists as' bs'
+```
+Como *map e fold* na lib Std ja temos uma função que faz a mesma coisa que nossa função *combinesLists* a função *zip*.
+Combinar *lists* em uma tupla normalmente não é muito útil, mas *zip* consegue ser combinado com *map e fold* para criar aplicações mais sofisticadas
+
+Exemplo somando os pares de 2 listas, 1 numero com 1, 2 com 2 e assim vai:
+```haskell
+pairwiseSum xs ys =
+  let sumEles pairs =
+        let a = fst pairs
+            b = snd pairs
+        in a + b
+  in map sumEles $ zip xs ys
+
+pairwiseSum' xs ys = map (uncurry (+)) $ zip xs ys
+```
+
+## Destructuring Values with Pattern Matching
