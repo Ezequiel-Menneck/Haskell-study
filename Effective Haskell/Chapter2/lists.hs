@@ -153,7 +153,7 @@ partyBudget' isAttending =
 double = [ 2 * x | x <- [0..10]]
 doubleOdds = [ 2 * x | x <- [0..10], odd x]
 
-partyBudget'' isAttending willEat foodCost guests = 
+partyBudget'' isAttending willEat foodCost guests =
   sum $
   [foodCost food
   | guest <- map fst guests
@@ -163,7 +163,7 @@ partyBudget'' isAttending willEat foodCost guests =
   ]
 
 combineLists as bs =
-  let 
+  let
     a = head as
     b = head bs
     as' = tail as
@@ -187,6 +187,50 @@ pairwiseSum xs ys =
   in map sumEles $ zip xs ys
 
 pairwiseSum' xs ys = map (uncurry (+)) $ zip xs ys
+
+customGreeting "George" = "Oh, hey George"
+customGreeting name = "Hello, " <> name
+
+matchNumber 0 = "zero"
+matchNumber n = show n
+
+matchList [1,2,3] = "one, two, three"
+matchList list = show list
+
+matchTuple ("hello", "world") = "greetings"
+matchTuple tuple = show tuple
+
+matchBool True = "yep"
+matchBool bool = "this must be false"
+
+matchTuple' ("hello", "world") = "Hello there, you great big world"
+matchTuple' ("hello", name) = "Oh, hi there, " <> name
+matchTuple' (salutation, "George") = "Oh! " <> salutation <> " George!"
+matchTuple' n = show n
+
+partialFunc 0 = "I only work for zero!"
+
+modifyPair p@(a,b)
+  | a == "Hello" = "this is a salutation"
+  | b == "George" = "this is a message for George"
+  | otherwise = "I dont know what " <> show p <> " means"
+
+favoritFood person =
+  case person of
+    "Ren" -> "Tofu"
+    "Rebecca" -> "Falafel"
+    "George" -> "Banana"
+    name -> "I dont know what " <> name <> " likes!"
+
+handleNums l =
+  case l of
+    [] -> "An empty list"
+    [x] | x == 0 -> "a list called: [0]"
+        | x == 1 -> "a list called: [1]"
+        | even x -> "a singleton list containing an even number"
+        | otherwise -> "the list contains " <> show x
+    _list -> "the list has more than 1 element"
+
 main = do
   print $ countUp 300
   print $ countUp2 30
@@ -199,3 +243,4 @@ main = do
   print zipLists
   print zipLists'
   print $ pairwiseSum' [1..10] [11..20]
+  print $ modifyPair ("Mike", "Tyson")

@@ -1,6 +1,6 @@
 # Working with Lists
 
-## Writing Code Using Lists
+# Writing Code Using Lists
 Listas são criadas utilizando *[]* e os elementos separados po *,*. Podemos ter listas do tipo que quisermos, como em qualquer outra linguagem.
 Listas só podem ter um tipo, ou seja, não podemos fazer algo como `[1, "a"]`
 
@@ -411,4 +411,126 @@ pairwiseSum xs ys =
 pairwiseSum' xs ys = map (uncurry (+)) $ zip xs ys
 ```
 
-## Destructuring Values with Pattern Matching
+# Destructuring Values with Pattern Matching
+
+*Pattern Matching* nos permite escrever expressões poderosas que combinem partes de um valor baseado na sua estrutura
+
+Na forma mais simples nos possibilita substituir uma variavel por um valor especifico.
+O padrão vai combinar se a variavel for igual o valor. Exemplo:
+```haskell
+customGreeting "George" = "Oh, hey George"
+customGreeting name = "Hello, " <> name
+```
+Uma das implementações verifica se o parametro é "George" se sim retorna a mensagem especial e a outra retorna a mensagem comum caso o parametro não seja "George"
+
+O Pattern matching acontece de forma *top-to-bottom* ou seja, se a função de *customGreeting name* fosse declarada primeira nunca conseguiriamos ter o resultado personalizado, visto que no primeiro caso ja bateria na função.
+
+Mais exemplos de *Pattern Matching*:
+```haskell
+matchNumber 0 = "zero"
+matchNumber n = show n
+
+matchList [1,2,3] = "one, two, three"
+matchList list = show list
+
+matchTuple ("hello", "world") = "greetings"
+matchTuple tuple = show tuple
+
+matchBool True = "yep"
+matchBool bool = "this must be false"
+```
+Além de modo que temos um caso especial primeiro e depois um catch-all também é possível aplicar pattern matching de outra maneira. Podemos ter uma série de casos diferentes, exemplo:
+```haskell
+matchTuple ("hello", "world") = "Hello there, you great big world"
+matchTuple ("hello", name) = "Oh, hi there, " <> name
+matchTuple (salutation, "George") = "Oh! " <> salutation <> " George!"
+matchTuple n = show n
+```
+No final dos padrões sempre temos um caso genérico que podemos fazer o catch caso nenhum dos casos seja aceito.
+
+Com isso também temos funções parciais que são funções que não atendem todas as possibilidades, não aceitam um caso default. Exemplo:
+```haskell
+partialFunc 0 = "I only work for zero!"
+-- partialFunc 0
+-- I only work for zero
+-- partialFunc 1
+-- *** Exception: <interactive:75:1-39>: Non-exhaustive pattern in function partialFunc
+```
+Não precisamos de um caso catch-all / wildcard para um *pattern matching* se conseguimos mapear todas as posibilidades, por exemplo com Boolean, onde só temos 2 possibilidades, *True e False*:
+```haskell
+matchBool True = "True, sorry"
+matchBool False = "Sorry, this is just not True"
+```
+## Destructuring Lists
+
+Podemos utilizar pattern matching de diferentes maneiras, no começo vimos que sempre que queriamos trabalhar com algum valor de uma lista precisavamos verificar se era vazia, pegar o head, pegar o tail, fazer algo, chamar a recursão. Agora com pattern matching podemos fazer algo como:
+```haskell
+addValues [] = 0
+addValues (first:rest) = first + (addValues rest)
+```
+
+Nesse caso fazemos o matching de 2 casos, no primeiro verificamos se a lista está vazia e caso sim retornamos 0 e no segundo extraimos a head e tail que chamamos de first e rest e chamamos a recursão.
+
+Podemos também utilizar *pattern matching* em let expressions como:
+```haskell
+fancyNumber n = (zip fibs primes) !! n
+
+printFancy n =
+  let (fib, prime) = fancyNumbers n
+      fib' = show fib
+      prime' = show prime
+  in "The fibonacci number is " <> fib' <> " and the prime is: " <> prime'
+```
+
+Em alguns casos vamos precisar pegar o valor da nossa variavel antes de ser desconstruida no pattern matching. Podemos fazer isso adicionando o nome da váriavel junto com um @ antes do *pattern*. Exemplo:
+```haskell
+modifyPair p@(a,b) 
+  | a == "Hello" = "this is a salutation"
+  | b == "George" = "this is a message for George"
+  | otherwise = "I dont know what " <> show p <> " means"
+```
+
+Um *pattern* especial que podemos usar é o *wildcard pattern*. É um padrão que combina com qualquer valor, como uma variavel, mas sem o binding de valor para a variavel na função. É algo como "o valor deveria estar aqui mas não ligo". Para usar wildcard usamos o \_ ao invés de o nome da variavel. Vamos ver um exemplo onde implementamos nossa função *fst e snd*.
+```haskell
+import Prelude hiding (fst, snd)
+
+fst (x, _, _) = x
+snd (_, x, _) = x
+thrd (_, _, x) = x
+
+map ($ (1,2,3)) [fst, snd, thrs]
+-- [1, 2, 3]
+```
+
+Para ignorar totalmente o valor da variavel usamos \_ que ja informa o time que é um valor que não  precisaremos. Em outros casos também é comum usar uma variavel onde o nome começa com \_. Como:
+```haskell
+printHead [] = "empty"
+printHead lst@(hd:_tail) =
+	"the head of " <> (sho lst) <> " is " <> show hd
+```
+Nesse caso o nome *_tail* é para deixarmos claro que o valor de tail não será usado.
+
+Além de podermos fazer o match de nossas funções na declaração também podemos fazer o match dela para diferentes inputs dentro do corpo com *case*. O *case* nos permite aplicar o *pattern matching* em um valor dentro de nossa função. Podemos combinar *pattern matching e guards* para criar uma condicional expressiva. *Case* parece como um switch de outras langs. Exemplo:
+```haskell
+favoritFood person =
+  case person of
+    "Ren" -> "Tofu"
+    "Rebecca" -> "Falafel"
+    "George" -> "Banana"
+    name -> "I dont know what " <> name <> " likes!"
+```
+
+Podemos combinar *case* com *guards*. Exemplo:
+```haskell
+handleNums l =
+  case l of
+    [] -> "An empty list"
+    [x] | x == 0 -> "a list called: [0]"
+        | x == 1 -> "a list called: [1]"
+        | even x -> "a singleton list containing an even number"
+        | otherwise -> "the list contains " <> show x
+    _list -> "the list has more than 1 element"
+```
+
+## Getting Warned About Incomplete Patterns
+
