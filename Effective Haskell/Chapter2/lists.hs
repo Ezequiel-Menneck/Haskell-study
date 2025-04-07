@@ -231,6 +231,25 @@ handleNums l =
         | otherwise -> "the list contains " <> show x
     _list -> "the list has more than 1 element"
 
+radsToDegrees :: Float -> Int
+radsToDegrees radians =
+  let degrees = cycle [0..359]
+      converted = truncate $ (radians * 360) / (2 * pi)
+  in degrees !! converted
+
+epicCicle inputList =
+  cycleHelper inputList
+  where
+    cycleHelper [] = epicCicle inputList
+    cycleHelper (x:xs) = x : cycleHelper xs
+
+findFirst predicate =
+  foldr findHelper []
+  where
+    findHelper listElement maybeFound
+      | predicate listElement = [listElement]
+      | otherwise = maybeFound
+
 main = do
   print $ countUp 300
   print $ countUp2 30
@@ -244,3 +263,5 @@ main = do
   print zipLists'
   print $ pairwiseSum' [1..10] [11..20]
   print $ modifyPair ("Mike", "Tyson")
+  print $ radsToDegrees 59
+  print $ findFirst (> 50) [49..]

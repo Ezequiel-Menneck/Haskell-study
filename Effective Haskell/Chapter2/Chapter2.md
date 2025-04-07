@@ -532,5 +532,4 @@ handleNums l =
     _list -> "the list has more than 1 element"
 ```
 
-## Getting Warned About Incomplete Patterns
 
