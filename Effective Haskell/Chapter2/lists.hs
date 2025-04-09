@@ -250,6 +250,16 @@ findFirst predicate =
       | predicate listElement = [listElement]
       | otherwise = maybeFound
 
+fib n
+  | n == 0 = 0
+  | n == 1 = 1
+  | otherwise = fib (n - 1) + fib (n - 2)
+
+fibs = map fib [0..]
+
+smallFibs = 
+  takeWhile (< 100) fibs
+
 main = do
   print $ countUp 300
   print $ countUp2 30
@@ -265,3 +275,4 @@ main = do
   print $ modifyPair ("Mike", "Tyson")
   print $ radsToDegrees 59
   print $ findFirst (> 50) [49..]
+  print $ findFirst (== "a") ["b", "j", "x", "a"]
