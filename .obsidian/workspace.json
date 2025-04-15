@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Effective Haskell/Chapter2/Chapter2.md",
+                "file": "Effective Haskell/Chapter2/Recursive, co-recursive and mutually recursive functions.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Chapter2"
+              "title": "Recursive, co-recursive and mutually recursive functions"
             }
           }
         ]
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "b5a5739fc42acddc",
@@ -143,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Effective Haskell/Chapter2/Chapter2.md",
+                "file": "Effective Haskell/Chapter2/Recursive, co-recursive and mutually recursive functions.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Chapter2"
+              "title": "Outline of Recursive, co-recursive and mutually recursive functions"
             }
           },
           {
@@ -182,9 +181,12 @@
   },
   "active": "a4b566b2353ee41e",
   "lastOpenFiles": [
+    "Effective Haskell/Chapter2/Chapter2.md",
+    "Effective Haskell/Chapter2/Recursive, co-recursive and mutually recursive functions.md",
+    "Effective Haskell/Chapter2/Captura de Tela 2025-04-14 às 08.43.44.png",
+    "Effective Haskell/Chapter2/fibs.hs",
     "Effective Haskell/Chapter2/Captura de Tela 2025-04-03 às 20.24.48.png",
     "Effective.md",
-    "Effective Haskell/Chapter2/Chapter2.md",
     "Effective Haskell/Chapter2/Captura de Tela 2025-04-03 às 20.16.55.png"
   ]
 }

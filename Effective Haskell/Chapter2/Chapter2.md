@@ -533,3 +533,4 @@ handleNums l =
 ```
 
 
+![[Captura de Tela 2025-04-14 às 08.43.44.png]]
